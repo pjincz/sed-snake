@@ -55,14 +55,14 @@ g
 	s/[.@]o/ox/
 }
 / ward:s/ {
-	# up
-	/o\(.\{77\}\)[.@]/ !b gameover
-	s/o\(.\{77\}\)[.@]/x\1o/
+	# down
+	/o\([^ ]\{77\}\)[.@]/ !b gameover
+	s/o\([^ ]\{77\}\)[.@]/x\1o/
 }
 / ward:w/ {
-	# down
-	/[.@]\(.\{77\}\)o/ !b gameover
-	s/[.@]\(.\{77\}\)o/o\1x/
+	# up
+	/[.@]\([^ ]\{77\}\)o/ !b gameover
+	s/[.@]\([^ ]\{77\}\)o/o\1x/
 }
 h
 
@@ -167,6 +167,7 @@ h
 b print
 
 :gameover
-s/.*/Game Over/
+g
+s/.*score:\([^ ]*\).*/Game Over! Your score: \1./
 p
 q
