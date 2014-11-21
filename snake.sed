@@ -169,6 +169,6 @@ b print
 
 :gameover
 g
-s/.*score:\([^ ]*\).*/Game Over! Your score: \1./
+s/.*score:\([^ ]*\).*/Game Over! Your score: \1.\n/
 p
 q
