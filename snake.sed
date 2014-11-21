@@ -1,4 +1,8 @@
 #!/bin/sed -nf
+# Snake game powered by sed
+# Author: jinchizhong@kingsoft.com
+# Licenese: BSD
+
 # init
 1 {
 	# 76 * 25
