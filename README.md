@@ -1,4 +1,4 @@
-Snake game wrote by sed
+Snake game wrote by SED
 =======================
 
 run
