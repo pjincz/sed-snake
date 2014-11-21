@@ -6,7 +6,7 @@
 	s/a/........../g
 	s/.*/&&&&&&&&&&&&&&&&&&&&&&&&&/
 	s/\....../xxxxxo/
-	s/.*/map:& ward:d queue:o|-o|--o|---o|----o/
+	s/.*/map:& ward:d queue:o|-o|--o|---o|----o score:0/
 	h
 	b gen_food
 }
@@ -67,7 +67,7 @@ g
 h
 
 # If food is eaten, jump to gen food, and skip clean tail one time.
-/map:[^ ]*@/ !b gen_food
+/map:[^ ]*@/ !b eaten
 
 # clean tail
 g
@@ -101,18 +101,39 @@ s/--bar--/+---------------------------------------------------------------------
 s/@/[01;34m@[0m/g
 s/[ox]/[01;31m&[0m/g
 s/[+-|-]/[01;32m&[0m/g
-# add help info
+# add info
 s/\n/  W or Up: turn up\n/4
 s/\n/  S or Down: turn down\n/5
 s/\n/  A or Left: turn left\n/6
 s/\n/  D or Right: turn right\n/7
 s/\n/  Blank line: forward\n/8
+s/\n/  Score: SCORE_PLACEHOLD\n/10
+G
+s/SCORE_PLACEHOLD\(.*\)\n[^\n]*score:\([^ ]*\).*$/\2\1/
 p
 # for debug
 #g
 #s/.*ward:/ward:/
 #p
 b
+
+:eaten
+# add score
+g
+s/.*score:\([^ ]*\).*/\1/
+# for easy deal: remove two zero, add 1, add two zero
+s/00$//
+s/$/z/
+:add_loop
+s/0z/1/; s/1z/2/; s/2z/3/; s/3z/4/; s/4z/5/; 
+s/5z/6/; s/6z/7/; s/7z/8/; s/8z/9/; s/9z/z0/;
+s/^z/1/; 
+/z/ b add_loop
+s/$/00/
+G
+s/\([^\n]*\)\n\(.*score:\)[^ ]*/\2\1/
+h
+b gen_food
 
 :gen_food
 # use buffer space to generate fake random
