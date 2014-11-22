@@ -2,13 +2,13 @@
 # Snake game powered by sed
 # Author: jinchizhong@kingsoft.com
 # Licenese: BSD
+# Version: 1.0
 
 # init
 1 {
-	# 76 * 25
-	s/.*/baaaaaaa......b/
-	s/a/........../g
-	s/.*/&&&&&&&&&&&&&&&&&&&&&&&&&/
+	# 20 * 20
+	s/.*/b....................b/
+	s/.*/&&&&&&&&&&&&&&&&&&&&/
 	s/\....../xxxxxo/
 	s/.*/map:& ward:d queue:o|-o|--o|---o|----o score:0/
 	h
@@ -60,13 +60,13 @@ g
 }
 / ward:s/ {
 	# down
-	/o\([^ ]\{77\}\)[.@]/ !b gameover
-	s/o\([^ ]\{77\}\)[.@]/x\1o/
+	/o\([^ ]\{21\}\)[.@]/ !b gameover
+	s/o\([^ ]\{21\}\)[.@]/x\1o/
 }
 / ward:w/ {
 	# up
-	/[.@]\([^ ]\{77\}\)o/ !b gameover
-	s/[.@]\([^ ]\{77\}\)o/o\1x/
+	/[.@]\([^ ]\{21\}\)o/ !b gameover
+	s/[.@]\([^ ]\{21\}\)o/o\1x/
 }
 h
 
@@ -88,7 +88,7 @@ t clean_loop_10
 s/^-\([^\n]*\)\n\(.\)\([^\n]*\)\n\(.*\)/\1\n\3\n\4\2/
 t clean_loop_1
 s/o\n.\([^\n]*\)\n\(.*\)/\2.\1/
-s/.\{76\}/b&b/g
+s/.\{20\}/b&b/g
 G
 s/\([^\n]*\)\nmap:[^ ]*\(.*\)queue:[^|]*|/map:\1\2queue:/
 h
@@ -97,15 +97,18 @@ h
 g
 s/.*map:\([^ ]*\).*/\1/
 s/b/|/g
-s/.\{78\}/ & \n/g
+s/.\{22\}/ & \n/g
 s/^/[H[2J --bar-- \n/
 s/$/ --bar-- /
-s/--bar--/+----------------------------------------------------------------------------+/g
-# colorize
-s/@/[01;34m@[0m/g
-s/[ox][ox]*/[01;31m&[0m/g
+s/--bar--/+----------------------------------------+/g
+# colorize and scale to wide char
 s/[+|-][+|-]*/[01;32m&[0m/g
+s/@/[01;34m＠[0m/g
+s/[ox][ox]*/[01;31m&[0m/g
+s/o/Ｏ/g
+s/x/Ｘ/g
 s/\.\.*/[01;90m&[0m/g
+s/\./  /g
 # add info
 s/\n/  W or Up: turn up\n/4
 s/\n/  S or Down: turn down\n/5
@@ -117,9 +120,7 @@ G
 s/SCORE_PLACEHOLD\(.*\)\n[^\n]*score:\([^ ]*\).*$/\2\1/
 p
 # for debug
-#g
-#s/.*ward:/ward:/
-#p
+#g; s/.*ward:/ward:/; p
 b
 
 :eaten
@@ -151,21 +152,21 @@ s/-/vvvvvvvvvvv/g
 s/=/vvvvvvvvvvvvvvvvv/g
 s/#/vvvvvvvvvvvvvvvvvvv/g
 s/[^v]/v/g
-s/.\{1900\}//g
+s/.\{400\}//g
 s/$/@/
 # add food to map
 G
 s/\n.*map:\([^ ]*\).*/\n\1\n/
 s/b//g
-:add_food_loop_40
-s/^v\{40\}\([^\n]*\)\n\(.\{40\}\)\([^\n]*\)\n\(.*\)/\1\n\3\n\4\2/
-t add_food_loop_40
+:add_food_loop_20
+s/^v\{20\}\([^\n]*\)\n\(.\{20\}\)\([^\n]*\)\n\(.*\)/\1\n\3\n\4\2/
+t add_food_loop_20
 :add_food_loop_1
 s/^v\([^\n]*\)\n\(.\)\([^\n]*\)\n\(.*\)/\1\n\3\n\4\2/
 t add_food_loop_1
 s/@\n\([^.]*\)\./\1@/
 s/\([^\n]*\)\n\(.*\)/\2\1/
-s/.\{76\}/b&b/g
+s/.\{20\}/b&b/g
 G
 s/\([^\n]*\)\n\(.*\)map:[^ ]*/\2map:\1/
 h
