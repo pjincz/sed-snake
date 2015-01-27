@@ -10,7 +10,7 @@
 	s/.*/b....................b/
 	s/.*/&&&&&&&&&&&&&&&&&&&&/
 	s/\....../xxxxxo/
-	s/.*/map:& ward:d queue:o|-o|--o|---o|----o score:0/
+	s/.*/ map:& ward:d queue:o|-o|--o|---o|----o score:0 /
 	h
 	b gen_food
 }
@@ -38,10 +38,9 @@ s/.*map:\([^ ]*\).*/\1/
 s/b//g
 s/@/./g
 y/.xo/--o/
-# - is 1, = is 10, # is 100
+# - is 1, = is 20
 s/-*$//
-s/----------/=/g
-s/==========/#/g
+s/--------------------/=/g
 G
 s/\(.*\)\n\(.*\)queue:\([^ ]*\)/\2queue:\3|\1/
 h
@@ -78,19 +77,16 @@ g
 s/.*map:\([^ ]*\).*queue:\([^ |]*\).*/\2\n\1/
 s/b//g
 s/$/\n/
-:clean_loop_100
-s/^#\([^\n]*\)\n\(.\{100\}\)\([^\n]*\)\n\(.*\)/\1\n\3\n\4\2/
-t clean_loop_100
-:clean_loop_10
-s/^=\([^\n]*\)\n\(.\{10\}\)\([^\n]*\)\n\(.*\)/\1\n\3\n\4\2/
-t clean_loop_10
+:clean_loop_20
+s/^=\([^\n]*\)\n\(.\{20\}\)\([^\n]*\)\n\(.*\)/\1\n\3\n\4\2/
+t clean_loop_20
 :clean_loop_1
 s/^-\([^\n]*\)\n\(.\)\([^\n]*\)\n\(.*\)/\1\n\3\n\4\2/
 t clean_loop_1
 s/o\n.\([^\n]*\)\n\(.*\)/\2.\1/
 s/.\{20\}/b&b/g
 G
-s/\([^\n]*\)\nmap:[^ ]*\(.*\)queue:[^|]*|/map:\1\2queue:/
+s/\(.*\)\n\(.*\)map:[^ ]*\(.*\) queue:[^|]*|/\2map:\1\3 queue:/
 h
 
 :print
@@ -118,9 +114,6 @@ s/\n/  Blank line: forward\n/8
 s/\n/  Score: SCORE_PLACEHOLD\n/10
 G
 s/SCORE_PLACEHOLD\(.*\)\n[^\n]*score:\([^ ]*\).*$/\2\1/
-p
-# for debug
-#g; s/.*ward:/ward:/; p
 b
 
 :eaten
@@ -175,5 +168,4 @@ b print
 :gameover
 g
 s/.*score:\([^ ]*\).*/Game Over! Your score: \1.\n/
-p
 q
